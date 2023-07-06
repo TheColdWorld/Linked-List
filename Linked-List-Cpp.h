@@ -59,7 +59,7 @@ public:
 		this->_Next = nullptr;
 		this->_Last = nullptr;
 	}
-	inline LinkedListItem(LinkedListItem<T>& others,bool& CreateNew=true)
+	inline LinkedListItem(LinkedListItem<T>& others,const bool& CreateNew=true)
 	{
 		if(!CreateNew)
 		{
@@ -67,7 +67,7 @@ public:
 			this->_Next = others._Next;
 			this->_Last = others._Last;
 		}
-		this->_This = new T(others._This);
+		this->_This = new T(*others._This);
 		this->_Next = nullptr;
 		this->_Last = nullptr;
 	}
@@ -182,10 +182,10 @@ public:
 		_Array = nullptr;
 	}
 	LinkList():_Array(new std::vector<LinkedListItem<Class>*>()){}
-	LinkList(LinkList<Class,IAllocator>& others,bool& CreateNew=true)
+	LinkList(LinkList<Class,IAllocator>& others,const bool& CreateNew=true)
 	{
 		if(!CreateNew) _Array=others._Array;
-		if(others .Length == 0) 
+		if(others .Length() == 0) 
 		{
 			#ifdef Linked_List_Use_C_exception
 			throw "Creation Failed:parameter's Length is 0";
@@ -194,10 +194,10 @@ public:
 			throw std::invalid_argument("Creation Failed:parameter's Length is 0");
 			#endif
 		}
-		_Array = new LinkedListItem<Class>*[others.Length];
-		for (IAllocator i = 0; i < others.Length; i++)
+		_Array = new std::vector<LinkedListItem<Class>*>(others.Length());
+		for (IAllocator i = 0; i < others.Length(); i++)
 		{
-			_Array[i] =new LinkedListItem<Class>(*others._Array[i],true);
+			_Array->push_back(new LinkedListItem<Class>(*others._Array->operator[](i),true));
 		}
 		Collect();
 	}
