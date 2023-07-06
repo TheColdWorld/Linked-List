@@ -438,7 +438,7 @@ public:
 
 	Iterator end() const
 	{
- 	   return Iterator(nullptr,Length()-1);
+ 	   return Iterator(_Array,Length());
 	}
 	LinkList(LinkList<Class, IAllocator>* other) 
 	{
